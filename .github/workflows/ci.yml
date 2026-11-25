@@ -1,9 +1,8 @@
-name: CI
+name: Verify typed-buffer channels
 
 on:
-  pull_request:
   push:
-    branches: [main]
+    branches: [ci/verify-mtbuf-308d7dc]
 
 permissions:
   contents: read
@@ -24,6 +23,8 @@ jobs:
       # The version and components pinned in rust-toolchain.toml.
       - run: rustup toolchain install
       - uses: Swatinem/rust-cache@v2
+      - name: Typed-buffer readbacks
+        run: cargo test -p victory-shader --locked --lib -- tbuffer typed_buffer normalized_buffer_formats --nocapture
       - name: Clippy
         run: cargo clippy --workspace --all-targets --locked -- -D warnings
       - name: Clippy, diagnostics build
